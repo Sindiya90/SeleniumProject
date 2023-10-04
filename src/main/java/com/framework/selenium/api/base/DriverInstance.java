@@ -33,6 +33,7 @@ public class DriverInstance{
 	}
 
 	public void setDriver(String browser, boolean headless) throws MalformedURLException {
+		String appUrl  = System.getProperty("seleniumwebdriverurl");
 		switch (browser) {
 		case "chrome":
 			ChromeOptions options = new ChromeOptions();
@@ -43,9 +44,10 @@ public class DriverInstance{
 			dc.setBrowserName("chrome");
 			dc.setPlatform(Platform.LINUX);
 			options.merge(dc);
-
-			//remoteWebdriver.set(new RemoteWebDriver(new URL("http://20.244.24.179:4444/wd/hub"), options));
-			remoteWebdriver.set(new RemoteWebDriver(new URL(generalConfig.webdriverurl()), options));
+			if(appUrl == null)
+			    remoteWebdriver.set(new RemoteWebDriver(new URL(generalConfig.webdriverurl()), options));
+			else
+				remoteWebdriver.set(new RemoteWebDriver(new URL("http://"+appUrl+":4444/wd/hub"), options));
 
 			break;
 		case "firefox":
@@ -54,8 +56,10 @@ public class DriverInstance{
 			desiredCap.setBrowserName("firefox");
 			desiredCap.setPlatform(Platform.LINUX);
 			firefoxOptions.merge(desiredCap);
-			//remoteWebdriver.set(new RemoteWebDriver(new URL("http://20.244.24.179:4444/wd/hub"), firefoxOptions));
-			remoteWebdriver.set(new RemoteWebDriver(new URL(generalConfig.webdriverurl()), firefoxOptions));
+			if(appUrl == null)
+			  remoteWebdriver.set(new RemoteWebDriver(new URL(generalConfig.webdriverurl()), firefoxOptions));
+			else
+				remoteWebdriver.set(new RemoteWebDriver(new URL("http://"+appUrl+":4444/wd/hub"), firefoxOptions));
 
 			break;
 		case "edge":

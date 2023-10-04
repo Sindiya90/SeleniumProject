@@ -21,10 +21,17 @@ public class ProjectSpecificMethods extends SeleniumBase {
 	@BeforeMethod
 	public void preCondition(String browserName) {
 		if(browserName.equalsIgnoreCase("chrome")) {
-		startApp("chrome", false, prop.getProperty("url"));
+
+		   if(System.getProperty("devserverurl")==null)
+		    startApp("chrome", false, prop.getProperty("url"));
+		   else
+		    startApp("chrome", false, "http://"+System.getProperty("devserverurl")+"/");
 		setNode();
 		} else if(browserName.equalsIgnoreCase("firefox")) {
-			startApp("firefox", false, prop.getProperty("url"));
+			if(System.getProperty("devserverurl")==null)
+			    startApp("firefox", false, prop.getProperty("url"));
+			else
+				startApp("chrome", false, "http://"+System.getProperty("devserverurl")+"/");
 			setNode();
 		}
 	}

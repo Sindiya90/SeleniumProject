@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import com.framework.selenium.api.base.ConfigProperties;
+import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
@@ -28,6 +30,7 @@ public abstract class Reporter extends DriverInstance {
 	private static final ThreadLocal<ExtentTest> parentTest = new ThreadLocal<ExtentTest>();
 	private static final ThreadLocal<ExtentTest> test = new ThreadLocal<ExtentTest>();
 	private static final ThreadLocal<String> testName = new ThreadLocal<String>();
+
 	
 	private String fileName = "result.html";
 	private String pattern = "dd-MMM-yyyy HH-mm-ss";
