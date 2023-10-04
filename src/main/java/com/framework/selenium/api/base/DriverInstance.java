@@ -3,7 +3,9 @@ package com.framework.selenium.api.base;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.Properties;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -20,6 +22,8 @@ public class DriverInstance{
 	private static final ThreadLocal<RemoteWebDriver> remoteWebdriver = new ThreadLocal<RemoteWebDriver>();
 	private static final ThreadLocal<WebDriverWait> wait = new  ThreadLocal<WebDriverWait>();
 
+	ConfigProperties generalConfig = ConfigFactory.create(ConfigProperties.class);
+
 	public void setWait() {
 		wait.set(new WebDriverWait(getDriver(), Duration.ofSeconds(10)));
 	}
@@ -28,19 +32,21 @@ public class DriverInstance{
 		return wait.get();
 	}
 
-	public void setDriver(String browser, boolean headless) throws MalformedURLException {		
+	public void setDriver(String browser, boolean headless) throws MalformedURLException {
 		switch (browser) {
 		case "chrome":
 			ChromeOptions options = new ChromeOptions();
-			options.addArguments("--start-maximized"); 
-			options.addArguments("--disable-notifications"); 
+			options.addArguments("--start-maximized");
+			options.addArguments("--disable-notifications");
 			options.addArguments("--incognito");
 		  	DesiredCapabilities dc = new DesiredCapabilities();
 			dc.setBrowserName("chrome");
 			dc.setPlatform(Platform.LINUX);
 			options.merge(dc);
 
-			remoteWebdriver.set(new RemoteWebDriver(new URL("http://20.244.24.179:4444/wd/hub"), options));
+			//remoteWebdriver.set(new RemoteWebDriver(new URL("http://20.244.24.179:4444/wd/hub"), options));
+			remoteWebdriver.set(new RemoteWebDriver(new URL(generalConfig.webdriverurl()), options));
+
 			break;
 		case "firefox":
 			FirefoxOptions firefoxOptions = new FirefoxOptions();
@@ -48,11 +54,13 @@ public class DriverInstance{
 			desiredCap.setBrowserName("firefox");
 			desiredCap.setPlatform(Platform.LINUX);
 			firefoxOptions.merge(desiredCap);
-			remoteWebdriver.set(new RemoteWebDriver(new URL("http://20.244.24.179:4444/wd/hub"), firefoxOptions));
+			//remoteWebdriver.set(new RemoteWebDriver(new URL("http://20.244.24.179:4444/wd/hub"), firefoxOptions));
+			remoteWebdriver.set(new RemoteWebDriver(new URL(generalConfig.webdriverurl()), firefoxOptions));
+
 			break;
 		case "edge":
 			remoteWebdriver.set(new EdgeDriver());
-			break;	
+			break;
 		case "ie":
 			remoteWebdriver.set(new InternetExplorerDriver());
 		default:
@@ -62,5 +70,7 @@ public class DriverInstance{
 	public RemoteWebDriver getDriver() {
 		return remoteWebdriver.get();
 	}
-	
+
+
+
 }
